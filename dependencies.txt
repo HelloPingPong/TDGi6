@@ -1,0 +1,13 @@
+Spring Web (spring-boot-starter-web)
+
+Spring Data JPA (spring-boot-starter-data-jpa)
+
+PostgreSQL Driver (postgresql) or H2 Database (h2database)
+
+Java Faker (com.github.javafaker:javafaker:<latest_version>)
+
+Jackson Dataformat CSV (com.fasterxml.jackson.dataformat:jackson-dataformat-csv)
+
+Jackson Dataformat XML (com.fasterxml.jackson.dataformat:jackson-dataformat-xml)
+
+Lombok (org.projectlombok:lombok) (Optional, but recommended)
