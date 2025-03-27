@@ -10,6 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping; // Import for DELETE
+import org.springframework.http.ResponseEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -132,4 +135,28 @@ public class ApiController {
              throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving schema", e);
         }
     }
+}
+
+    // ADD: Endpoint to list all saved schemas (ID and Name) for dropdown
+    @GetMapping("/schemas")
+    public ResponseEntity<List<SchemaSummaryDto>> getAllSchemaSummaries() {
+        List<SchemaSummaryDto> summaries = schemaService.getAllSchemaSummaries();
+        return ResponseEntity.ok(summaries);
+    }
+
+    // ADD: Endpoint to delete a schema
+    @DeleteMapping("/schemas/{id}")
+    public ResponseEntity<Void> deleteSchema(@PathVariable Long id) {
+         try {
+             schemaService.deleteSchema(id);
+             log.info("Deleted schema with ID: {}", id);
+             return ResponseEntity.noContent().build(); // Standard HTTP 204 No Content on successful delete
+         } catch (jakarta.persistence.EntityNotFoundException e) {
+             log.warn("Attempted to delete non-existent schema with ID: {}", id);
+             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Schema not found", e);
+         } catch (Exception e) {
+             log.error("Error deleting schema with ID: {}", id, e);
+             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error deleting schema", e);
+         }
+     }
 }
