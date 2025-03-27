@@ -5,6 +5,9 @@ import com.example.datagenerator.dto.SchemaDefinitionDto;
 import com.example.datagenerator.model.FieldDefinition;
 import com.example.datagenerator.model.SchemaDefinition;
 import com.example.datagenerator.repository.SchemaDefinitionRepository;
+import com.example.datagenerator.dto.SchemaSummaryDto;
+import java.util.List;
+import java.util.stream.Collectors;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ import java.util.stream.IntStream;
 public class SchemaService {
 
     private final SchemaDefinitionRepository schemaRepository;
+    private static final Logger log = LoggerFactory.getLogger(SchemaService.class);
 
     @Transactional // Ensure atomicity
     public SchemaDefinitionDto saveSchema(SchemaDefinitionDto schemaDto) {
@@ -84,4 +88,41 @@ public class SchemaService {
              .buildAndExpand(schemaId)
              .toUriString();
      }
+}
+
+@Transactional(readOnly = true)
+    public List<SchemaSummaryDto> getAllSchemaSummaries() {
+        log.debug("Fetching all schema summaries");
+        return schemaRepository.findAll().stream()
+                .map(schema -> new SchemaSummaryDto(schema.getId(), schema.getName()))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteSchema(Long id) {
+        log.debug("Attempting to delete schema with id: {}", id);
+        if (!schemaRepository.existsById(id)) {
+            throw new EntityNotFoundException("Schema not found with id: " + id);
+        }
+        schemaRepository.deleteById(id);
+        log.info("Successfully deleted schema with id: {}", id);
+    }
+
+    // Optional: Modify generateShareLink depending on the frontend URL structure
+    // Default behavior (generating API link) is fine, frontend will construct its own URL.
+    private String generateShareLink(Long schemaId) {
+        // Generates the API link to fetch the schema
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+            .path("/api/schemas/{id}") // Link to the API endpoint
+            .buildAndExpand(schemaId)
+            .toUriString();
+     }
+      // Ensure convertFieldToDto exists and is correct
+     private FieldDefinitionDto convertFieldToDto(FieldDefinition field) {
+        FieldDefinitionDto dto = new FieldDefinitionDto();
+        dto.setName(field.getName());
+        dto.setDataType(field.getDataType());
+        dto.setOptions(field.getOptions());
+        return dto;
+    }
 }
