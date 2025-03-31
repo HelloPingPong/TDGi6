@@ -4,15 +4,15 @@ import com.example.datagenerator.dto.*;
 import com.example.datagenerator.generator.DataTypeGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.github.javafaker.Faker;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import java.util.*;
@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
-@RequiredArgsConstructor
 public class DataGenerationService {
 
     private static final Logger log = LoggerFactory.getLogger(DataGenerationService.class);
@@ -28,9 +27,36 @@ public class DataGenerationService {
     private final ObjectMapper objectMapper; // For JSON
     private final CsvMapper csvMapper; // For CSV
     private final XmlMapper xmlMapper; // For XML
+
+    @Autowired
+    public DataGenerationService(List<DataTypeGenerator> generators, ObjectMapper objectMapper,
+            @Qualifier("csvMapper") CsvMapper csvMapper,
+            @Qualifier("xmlMapper") XmlMapper xmlMapper) {
+        this.generators = generators;
+        this.objectMapper = objectMapper;
+        this.csvMapper = csvMapper;
+        this.xmlMapper = xmlMapper;
+    }
+
     private final Faker faker = new Faker(); // Create one instance
 
     private Map<String, DataTypeGenerator> generatorMap;
+
+    // Methods to handle JSON, CSV, and XML separately
+    public String handleJson(Object data) throws JsonProcessingException {
+        ObjectMapper jsonMapper = new ObjectMapper(); // Use default ObjectMapper for JSON
+        return jsonMapper.writeValueAsString(data);
+    }
+
+    public String handleCsv(Object data) throws JsonProcessingException {
+        // Use csvMapper for CSV-specific logic
+        return csvMapper.writeValueAsString(data);
+    }
+
+    public String handleXml(Object data) throws JsonProcessingException {
+        // Use xmlMapper for XML-specific logic
+        return xmlMapper.writeValueAsString(data);
+    }
 
     @PostConstruct
     public void init() {
@@ -52,7 +78,7 @@ public class DataGenerationService {
         return formatData(data, request.getFormat(), request.getSchema(), request.getTableName());
     }
 
-     public List<Map<String, Object>> generateRawData(List<FieldDefinitionDto> schema, int rowCount) {
+    public List<Map<String, Object>> generateRawData(List<FieldDefinitionDto> schema, int rowCount) {
         return IntStream.range(0, rowCount)
                 .mapToObj(i -> generateRow(schema))
                 .collect(Collectors.toList());
@@ -70,7 +96,7 @@ public class DataGenerationService {
                     row.put(field.getName(), "[ERROR]"); // Indicate error in output
                 }
             } else {
-                 log.warn("No generator found for data type: {}", field.getDataType());
+                log.warn("No generator found for data type: {}", field.getDataType());
                 row.put(field.getName(), "[UNKNOWN TYPE]");
             }
         }
@@ -111,10 +137,10 @@ public class DataGenerationService {
         // Alternatively structure as <rows><row><field>value</field></row>...</rows> requires more custom serialization
     }
 
-     private String formatSql(List<Map<String, Object>> data, List<FieldDefinitionDto> schema, String tableName) {
+    private String formatSql(List<Map<String, Object>> data, List<FieldDefinitionDto> schema, String tableName) {
         if (data.isEmpty()) return "-- No data to generate SQL for";
         if (!StringUtils.hasText(tableName)) {
-             return "-- Error: Table name is required for SQL format.";
+            return "-- Error: Table name is required for SQL format.";
         }
 
         String columns = schema.stream()
@@ -140,7 +166,7 @@ public class DataGenerationService {
         return sql.toString();
     }
 
-     private String formatPlainText(List<Map<String, Object>> data, List<FieldDefinitionDto> schema) {
+    private String formatPlainText(List<Map<String, Object>> data, List<FieldDefinitionDto> schema) {
         if (data.isEmpty()) return "";
 
         // Simple tab-separated values
