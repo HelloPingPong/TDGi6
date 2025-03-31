@@ -10,12 +10,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Service
@@ -71,7 +70,7 @@ public class SchemaService {
         return dto;
     }
 
-     private FieldDefinitionDto convertFieldToDto(FieldDefinition field) {
+    private FieldDefinitionDto convertFieldToDto(FieldDefinition field) {
         FieldDefinitionDto dto = new FieldDefinitionDto();
         dto.setName(field.getName());
         dto.setDataType(field.getDataType());
@@ -81,16 +80,15 @@ public class SchemaService {
     }
 
     private String generateShareLink(Long schemaId) {
-         // Generates a link relative to the current request's base URL
-         // Assumes the API is mounted at the root or a known context path
-         return ServletUriComponentsBuilder.fromCurrentContextPath()
-             .path("/api/schemas/{id}") // Matches GET endpoint
-             .buildAndExpand(schemaId)
-             .toUriString();
-     }
-}
+        // Generates a link relative to the current request's base URL
+        // Assumes the API is mounted at the root or a known context path
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/schemas/{id}") // Matches GET endpoint
+                .buildAndExpand(schemaId)
+                .toUriString();
+    }
 
-@Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public List<SchemaSummaryDto> getAllSchemaSummaries() {
         log.debug("Fetching all schema summaries");
         return schemaRepository.findAll().stream()
@@ -106,23 +104,5 @@ public class SchemaService {
         }
         schemaRepository.deleteById(id);
         log.info("Successfully deleted schema with id: {}", id);
-    }
-
-    // Optional: Modify generateShareLink depending on the frontend URL structure
-    // Default behavior (generating API link) is fine, frontend will construct its own URL.
-    private String generateShareLink(Long schemaId) {
-        // Generates the API link to fetch the schema
-        return ServletUriComponentsBuilder.fromCurrentContextPath()
-            .path("/api/schemas/{id}") // Link to the API endpoint
-            .buildAndExpand(schemaId)
-            .toUriString();
-     }
-      // Ensure convertFieldToDto exists and is correct
-     private FieldDefinitionDto convertFieldToDto(FieldDefinition field) {
-        FieldDefinitionDto dto = new FieldDefinitionDto();
-        dto.setName(field.getName());
-        dto.setDataType(field.getDataType());
-        dto.setOptions(field.getOptions());
-        return dto;
     }
 }
