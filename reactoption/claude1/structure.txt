@@ -1,0 +1,34 @@
+# React App Structure
+
+```
+src/
+├── components/
+│   ├── Header/
+│   │   ├── Header.jsx
+│   │   └── Header.css
+│   ├── SchemaSection/
+│   │   ├── SchemaSection.jsx
+│   │   ├── SchemaField.jsx
+│   │   ├── SchemaManagement.jsx
+│   │   └── SchemaSection.css
+│   ├── GenerationSection/
+│   │   ├── GenerationSection.jsx
+│   │   ├── GenerationControls.jsx
+│   │   ├── PreviewTable.jsx
+│   │   └── GenerationSection.css
+│   └── Footer/
+│       ├── Footer.jsx
+│       └── Footer.css
+├── context/
+│   └── AppContext.jsx
+├── services/
+│   └── apiService.js
+├── utils/
+│   └── helpers.js
+├── App.jsx
+├── App.css
+├── index.jsx
+└── index.css
+```
+
+This structure organizes our application into logical components while maintaining separation of concerns.
