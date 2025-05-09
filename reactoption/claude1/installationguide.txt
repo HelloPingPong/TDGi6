@@ -1,0 +1,75 @@
+# Test Data Generator React App
+
+This project is a React-based frontend for the Test Data Generator application, which communicates with a Spring Boot backend to generate test data based on user-defined schemas.
+
+## Setting Up the Project
+
+### Prerequisites
+- Node.js (v14 or later)
+- npm or yarn
+- Spring Boot backend running (see backend documentation)
+
+### Installation
+
+1. Create a new React application:
+```bash
+npx create-react-app test-data-generator
+cd test-data-generator
+```
+
+2. Replace the default files with the ones provided in this conversion:
+   - Delete all files in the `/src` directory
+   - Copy all the converted React files into the `/src` directory, maintaining the folder structure
+   
+3. Install required dependencies:
+```bash
+npm install
+```
+
+## Running the Application
+
+1. Start the Spring Boot backend:
+   - Make sure your backend is running on http://localhost:8080
+   - Ensure CORS is properly configured
+
+2. Start the React development server:
+```bash
+npm start
+```
+
+The application will be available at http://localhost:3000
+
+## Building for Production
+
+To create a production build:
+
+```bash
+npm run build
+```
+
+The build files will be created in the `/build` directory, which can be deployed to your web server.
+
+## Configuration
+
+- The backend API URL can be configured in `src/services/apiService.js` by changing the `API_BASE_URL` constant.
+
+## Features
+
+- Define data schemas with customizable fields, types and options
+- Generate test data in various formats (CSV, JSON, SQL, XML, PlainText)
+- Preview generated data
+- Save and load schemas
+- Share schemas via URL
+- Dark mode support
+- Responsive design
+
+## Notes for Deployment
+
+1. To deploy with the Spring Boot backend:
+   - Build the React app
+   - Copy the contents of the `/build` directory to the `src/main/resources/static` directory in your Spring Boot project
+   - This will allow the backend to serve the frontend
+
+2. If deploying separately:
+   - Ensure CORS is properly configured on the backend
+   - Update the `API_BASE_URL` to point to your deployed backend
