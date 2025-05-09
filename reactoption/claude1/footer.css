@@ -1,0 +1,10 @@
+/* src/components/Footer/Footer.css */
+.app-footer {
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.85rem;
+    color: var(--jpmc-dark-gray);
+    border-top: 1px solid var(--jpmc-border-color);
+    margin-top: 2rem;
+    flex-shrink: 0;
+}
