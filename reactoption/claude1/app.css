@@ -1,0 +1,101 @@
+/* src/App.css */
+/* Import the original CSS variables */
+:root {
+    --jpmc-primary-blue: #005eaa;
+    --jpmc-dark-blue: #003a70;
+    --jpmc-light-gray: #f4f4f4;
+    --jpmc-medium-gray: #cccccc;
+    --jpmc-dark-gray: #666666;
+    --jpmc-text-color: #333333;
+    --jpmc-bg-color: #ffffff;
+    --jpmc-border-color: #dddddd;
+    --jpmc-error-bg: #f8d7da;
+    --jpmc-error-text: #721c24;
+    --jpmc-error-border: #f5c6cb;
+    --jpmc-success-bg: #d4edda;
+    --jpmc-success-text: #155724;
+
+    --jpmc-font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Dark Mode Variables */
+body.dark {
+    --jpmc-text-color: #e0e0e0;
+    --jpmc-bg-color: #1a1a1a;
+    --jpmc-border-color: #444444;
+    --jpmc-light-gray: #2a2a2a;
+    --jpmc-medium-gray: #555555;
+    --jpmc-dark-gray: #888888;
+    --jpmc-error-bg: #5a2a2f;
+    --jpmc-error-text: #f8d7da;
+    --jpmc-error-border: #721c24;
+    --jpmc-success-bg: #1e4b2a;
+    --jpmc-success-text: #d4edda;
+}
+
+body {
+    font-family: var(--jpmc-font-family);
+    color: var(--jpmc-text-color);
+    background-color: var(--jpmc-bg-color);
+    margin: 0;
+    transition: background-color 0.3s, color 0.3s;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+input, button, select {
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.app-main {
+    flex-grow: 1;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); /* Responsive columns */
+    gap: 2rem;
+}
+
+/* Error & Loading */
+.error-message {
+    color: var(--jpmc-error-text);
+    background-color: var(--jpmc-error-bg);
+    border: 1px solid var(--jpmc-error-border);
+    padding: 0.75rem 1rem;
+    border-radius: 3px;
+    margin-top: 1rem;
+}
+
+.loading-indicator {
+    color: var(--jpmc-success-text);
+    background-color: var(--jpmc-success-bg);
+    border: 1px solid var(--jpmc-success-text);
+    padding: 0.75rem 1rem;
+    border-radius: 3px;
+    margin-top: 1rem;
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+/* Responsiveness */
+@media (max-width: 960px) {
+    .app-main {
+        grid-template-columns: 1fr; /* Stack sections */
+    }
+}
+
+@media (max-width: 600px) {
+    .app-main {
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+}
