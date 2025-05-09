@@ -1,0 +1,223 @@
+/* src/components/SchemaSection/SchemaSection.css */
+.schema-section {
+    background-color: var(--jpmc-bg-color);
+    padding: 1.5rem;
+    border: 1px solid var(--jpmc-border-color);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s, border-color 0.3s;
+    display: flex;
+    flex-direction: column;
+}
+
+h2, h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--jpmc-primary-blue);
+    font-weight: 500;
+    border-bottom: 1px solid var(--jpmc-border-color);
+    padding-bottom: 0.5rem;
+}
+
+h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Schema Editor Styles */
+#schemaFieldsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    min-height: 60px; /* Prevent collapsing */
+}
+
+.schema-field-row {
+    display: grid;
+    grid-template-columns: minmax(100px, 1fr) minmax(150px, 1.5fr) minmax(100px, 1fr) auto; /* Name, Type, Options, Remove */
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.field-input {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--jpmc-medium-gray);
+    border-radius: 3px;
+    background-color: var(--jpmc-bg-color);
+    color: var(--jpmc-text-color);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    width: 100%; /* Make inputs fill their grid cells */
+}
+
+body.dark .field-input {
+    border-color: var(--jpmc-dark-gray);
+}
+
+.field-input:focus {
+    outline: none;
+    border-color: var(--jpmc-primary-blue);
+    box-shadow: 0 0 0 2px rgba(0, 94, 170, 0.2);
+}
+
+.add-field-btn,
+.remove-field-btn,
+.schema-management button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s, opacity 0.2s;
+    white-space: nowrap; /* Prevent button text wrapping */
+}
+
+.add-field-btn {
+    background-color: var(--jpmc-primary-blue);
+    color: white;
+    margin-top: 0.5rem;
+    align-self: flex-start;
+}
+
+.add-field-btn:hover {
+    background-color: var(--jpmc-dark-blue);
+}
+
+.remove-field-btn {
+    background-color: var(--jpmc-error-bg);
+    color: var(--jpmc-error-text);
+    font-size: 1.1rem;
+    padding: 0.3rem 0.6rem;
+    line-height: 1;
+    margin-left: 0.25rem; /* Small space */
+    border: 1px solid var(--jpmc-error-border);
+}
+
+.remove-field-btn:hover {
+    opacity: 0.8;
+}
+
+/* Schema Management */
+.schema-management {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--jpmc-border-color);
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping */
+    gap: 0.75rem;
+    align-items: center;
+    transition: border-color 0.3s;
+}
+
+.schema-management input[type="text"],
+.schema-management select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--jpmc-medium-gray);
+    border-radius: 3px;
+    background-color: var(--jpmc-bg-color);
+    color: var(--jpmc-text-color);
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+body.dark .schema-management input[type="text"],
+body.dark .schema-management select {
+    border-color: var(--jpmc-dark-gray);
+}
+
+#schemaName {
+    flex-grow: 1; /* Allow name input to grow */
+    min-width: 150px;
+}
+
+#loadSchemaSelect {
+    flex-grow: 1;
+    min-width: 150px;
+}
+
+.schema-management button {
+    background-color: var(--jpmc-primary-blue);
+    color: white;
+}
+
+.schema-management button:hover {
+    background-color: var(--jpmc-dark-blue);
+}
+
+.schema-management button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#deleteSchemaBtn {
+    background-color: var(--jpmc-error-bg);
+    color: var(--jpmc-error-text);
+    border: 1px solid var(--jpmc-error-border);
+}
+
+#deleteSchemaBtn:hover {
+    opacity: 0.8;
+}
+
+.share-info {
+    font-size: 0.85rem;
+    color: var(--jpmc-dark-gray);
+    margin: 0.5rem 0 0 0;
+    word-break: break-all;
+    flex-basis: 100%; /* Take full width */
+}
+
+.share-info a {
+    color: var(--jpmc-primary-blue);
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.share-info a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .schema-section {
+        padding: 1rem;
+    }
+
+    .schema-field-row {
+        grid-template-columns: 1fr auto; /* Stack name/type/options and remove */
+        grid-template-rows: auto auto auto;
+        gap: 0.4rem;
+    }
+    
+    .field-name {
+        grid-column: 1 / 2;
+        grid-row: 1 / 2;
+    }
+    
+    .field-type {
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+    }
+    
+    .field-options {
+        grid-column: 1 / 2;
+        grid-row: 3 / 4;
+    }
+    
+    .remove-field-btn {
+        grid-column: 2 / 3;
+        grid-row: 1 / 4;
+        align-self: center;
+    }
+
+    .schema-management {
+        gap: 0.5rem;
+    }
+    
+    .schema-management button {
+        padding: 0.4rem 0.8rem;
+    }
+    
+    #schemaName, #loadSchemaSelect {
+        min-width: 120px;
+    }
+}
